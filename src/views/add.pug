@@ -2,19 +2,9 @@ extends layout
 
 block content
   main.container
-    h1.text-center= title
-    div.text-right
-      a.add-button(href="/add") Agregar Tarea
-    ul.task-list
-      if tasks.length === 0
-        li
-          b.text-center No tienes tareas por hacer 😃👌🏻
-      else
-        each task in tasks
-          li(class=task.completed ? "completed": "")
-            a(href=`/edit/${task.id}`) #{task.title}
-            if task.completed
-              a.uncomplete-button(href=`/uncomplete/${task.id}`) Desmarcar
-            else
-              a.complete-button(href=`/complete/${task.id}`) Completar
-            a.delete-button(href=`/delete/${task.id}`) Eliminar
+    h1= title
+    form(action="/add" method="POST")
+      label(for="title") Título de la Tarea
+      input(type="text", id="title", name="title", required)
+      button.add-button(type="submit") Agregar
+    a.back-button(href="/") ↩️🏠 Volver

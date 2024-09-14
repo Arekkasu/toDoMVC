@@ -7,7 +7,7 @@ let tasks = [
 ];
 
 const getAllTask = (req: Request, res: Response) => {
-  res.render("index", { title: "Lista de tareas", tasks });
+  res.render("index", { title: "Lista de tareas", tasks: tasks });
 };
 const getAddTaskForm = (req: Request, res: Response) => {
   res.render("add", { title: "Agregar Tarea" });
@@ -43,6 +43,7 @@ const completeTask = (req: Request, res: Response) => {
     res.redirect("/");
   } else {
     tasks[taskIndex].completed = true;
+    res.redirect("/");
   }
 };
 const uncompletedTask = (req: Request, res: Response) => {
