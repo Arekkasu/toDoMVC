@@ -3,9 +3,9 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import path from "path";
-import { taskController } from "./controllers/taskController";
 import { envs } from "./config/env.plugin";
 import { errorsController } from "./controllers/errorsController";
+import routesTask from "./routes/rTask";
 
 const app = express();
 const port = envs.PORT;
@@ -23,16 +23,8 @@ app.use(express.json());
 //CODIFICAION DE DATOS ESTEN CORRECTAMENTE
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", taskController.getAllTask);
-app.get("/add", taskController.getAddTaskForm);
-app.post("/add", taskController.addTasks);
-
-app.get("/edit/:id", taskController.getEditTaksForm);
-app.post("/edit/:id", taskController.updateTask);
-app.get("/complete/:id", taskController.completeTask);
-app.get("/uncomplete/:id", taskController.uncompletedTask);
-app.get("/delete/:id", taskController.deleteTask);
-
+//definicion de ruta
+app.use(routesTask);
 //LOS ERRORES VAN AL FINAL
 app.use(errorsController.error404);
 app.listen(port, () => {
