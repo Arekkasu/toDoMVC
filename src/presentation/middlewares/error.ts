@@ -7,4 +7,9 @@ export const error = {
       message: "El recurso que estás buscando no existe.",
     });
   },
+  error505: (req: Request, res: Response, error: any) => {
+    res
+      .status(500)
+      .render("error", { title: "Error Internal Server", message: error });
+  },
 };

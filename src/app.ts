@@ -32,6 +32,10 @@ const port = envs.PORT;
   });
 
   const prisma = new PrismaClient();
-  const tasks = await prisma.tasks.findMany();
-  console.log(tasks);
+  const busqueda = await prisma.tasks.findUnique({
+    where: {
+      id: 8,
+    },
+  });
+  console.log(busqueda);
 })();

@@ -1,26 +1,44 @@
 import { Request, Response } from "express";
+import { error } from "../middlewares/error";
+import { TaskRepositoryImpl } from "../../infrastructure/repositories/task.repository.impl";
+import { PostgresTaskDatasource } from "../../infrastructure/datasources/psql-task.datasource";
+import { TaskEntity } from "../../domain/entities/tasks.entity";
 
-let tasks = [{ id: 1, title: "d", completed: false }];
+const databaseSystem = new TaskRepositoryImpl(new PostgresTaskDatasource());
+
+let tasks: any[] = [];
 
 const taskController = {
-  getAll: (req: Request, res: Response) => {
-    res.render("index", { title: "Lista de tareas", tasks });
+  getAll: async (req: Request, res: Response) => {
+    try {
+      const tasks: TaskEntity[] = await databaseSystem.getAll();
+      res.render("index", { title: "Lista de tareas", tasks });
+    } catch (e) {
+      error.error505(req, res, e);
+    }
   },
   getAddForm: (req: Request, res: Response) => {
     res.render("add", { title: "Agregar Tarea" });
   },
-  add: (req: Request, res: Response) => {
-    let { title } = req.body;
-    console.log(req.body);
-    let id = tasks.length + 1;
-    tasks.push({ id, title, completed: false });
-    res.redirect("/");
+  add: async (req: Request, res: Response) => {
+    try {
+      let { title } = req.body;
+      console.log(title);
+      const savetask = await databaseSystem.saveTask({ title });
+      res.redirect("/");
+    } catch (e) {
+      error.error505(req, res, e);
+    }
   },
-  getEditForm: (req: Request, res: Response) => {
+  getEditForm: async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    typeof tasks[id] === "undefined"
-      ? res.redirect("/")
-      : res.render("edit", { title: "editar", task: tasks[id - 1] });
+    try {
+      let id = parseInt(req.params.id);
+      const task = await databaseSystem.getTask(id);
+      task === null
+        ? res.redirect("/")
+        : res.render("edit", { title: "editar", task: task });
+    } catch (e) {}
   },
   update: (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
