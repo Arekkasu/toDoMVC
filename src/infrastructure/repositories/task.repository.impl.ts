@@ -14,18 +14,18 @@ export class TaskRepositoryImpl implements TaskRepository {
     return this.taskDatasource.getTask(id);
   }
   saveTask(task: createTasksOptions): Promise<void> {
-    throw new Error("Method not implemented.");
+    return this.taskDatasource.saveTask(task);
   }
-  updateTask(id: number, title: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async updateTask(id: number, title: string): Promise<void> {
+    return this.taskDatasource.updateTask(id, title);
   }
-  completedTask(id: Number): Promise<void> {
-    throw new Error("Method not implemented.");
+  async completedTask(id: Number): Promise<void> {
+    return this.taskDatasource.completedTask(id);
   }
-  uncompletedTask(id: Number): Promise<void> {
-    throw new Error("Method not implemented.");
+  async uncompletedTask(id: Number): Promise<void> {
+    return this.taskDatasource.uncompletedTask(id);
   }
   deleteTask(id: Number): Promise<void> {
-    throw new Error("Method not implemented.");
+    return this.taskDatasource.deleteTask(id);
   }
 }

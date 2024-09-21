@@ -31,11 +31,10 @@ const port = envs.PORT;
     console.log(`Server running on port ${port}`);
   });
 
-  const prisma = new PrismaClient();
-  const busqueda = await prisma.tasks.findUnique({
-    where: {
-      id: 8,
-    },
-  });
-  console.log(busqueda);
+  // const prisma = new PrismaClient();
+  // const busqueda = await prisma.tasks.findUnique({
+  //   where: {
+  //     id: 8,
+  //   },
+  // });
 })();

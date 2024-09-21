@@ -31,19 +31,61 @@ export class PostgresTaskDatasource implements TaskDatasource {
       throw error;
     }
   }
-  saveTask(task: createTasksOptions): Promise<void> {
-    throw new Error("Method not implemented.");
+  async saveTask(task: createTasksOptions): Promise<void> {
+    try {
+      const { title } = task;
+      await prisma.tasks.create({
+        data: {
+          title: title,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-  updateTask(id: number, title: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async updateTask(id: number, title: string): Promise<void> {
+    try {
+      const taskEdit = await prisma.tasks.update({
+        where: {
+          id,
+        },
+        data: {
+          title,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-  completedTask(id: Number): Promise<void> {
-    throw new Error("Method not implemented.");
+  async completedTask(id: number): Promise<void> {
+    try {
+      const taskEdit = await prisma.tasks.update({
+        where: {
+          id,
+        },
+        data: { completed: true },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-  uncompletedTask(id: Number): Promise<void> {
-    throw new Error("Method not implemented.");
+  async uncompletedTask(id: number): Promise<void> {
+    try {
+      const taskEdit = await prisma.tasks.update({
+        where: {
+          id,
+        },
+        data: { completed: false },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
-  deleteTask(id: Number): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteTask(id: number): Promise<void> {
+    try {
+      const taskEdit = await prisma.tasks.delete({ where: { id } });
+    } catch (error) {
+      throw error;
+    }
   }
 }

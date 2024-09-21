@@ -40,43 +40,46 @@ const taskController = {
         : res.render("edit", { title: "editar", task: task });
     } catch (e) {}
   },
-  update: (req: Request, res: Response) => {
+  update: async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    let taskIndex = tasks.findIndex((task) => task.id === id);
-
-    if (taskIndex === -1) {
+    let { title } = req.body;
+    const task = await databaseSystem.getTask(id);
+    if (task === null) {
       res.redirect("/");
     } else {
-      tasks[taskIndex].title = req.body.title;
+      await databaseSystem.updateTask(id, title);
       res.redirect("/");
     }
   },
-  complete: (req: Request, res: Response) => {
+  complete: async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    let taskIndex = tasks.findIndex((task) => task.id === id);
-    if (taskIndex === -1) {
+    const task = await databaseSystem.getTask(id);
+    if (task === null) {
       res.redirect("/");
     } else {
-      tasks[taskIndex].completed = true;
-    }
-  },
-  uncompleted: (req: Request, res: Response) => {
-    let id = parseInt(req.params.id);
-    let taskIndex = tasks.findIndex((task) => task.id === id);
-    if (taskIndex === -1) {
-      res.redirect("/");
-    } else {
-      tasks[taskIndex].completed = false;
+      await databaseSystem.completedTask(id);
       res.redirect("/");
     }
   },
-  delete: (req: Request, res: Response) => {
+  uncompleted: async (req: Request, res: Response) => {
     let id = parseInt(req.params.id);
-    tasks = tasks.filter((task) => {
-      //IMPORTANTE RESALTAR EL RETURN
-      return task.id !== id;
-    });
-    res.redirect("/");
+    const task = await databaseSystem.getTask(id);
+    if (task === null) {
+      res.redirect("/");
+    } else {
+      await databaseSystem.uncompletedTask(id);
+      res.redirect("/");
+    }
+  },
+  delete: async (req: Request, res: Response) => {
+    let id = parseInt(req.params.id);
+    const task = await databaseSystem.getTask(id);
+    if (task === null) {
+      res.redirect("/");
+    } else {
+      await databaseSystem.deleteTask(id);
+      res.redirect("/");
+    }
   },
 };
 
