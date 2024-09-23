@@ -20,3 +20,8 @@ model tasks {
   completed Boolean @default(false)
 
 }
+
+model users {
+  username String @id
+  password String
+}

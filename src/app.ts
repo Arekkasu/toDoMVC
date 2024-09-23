@@ -1,4 +1,5 @@
 import helmet from "helmet";
+import session, { Session } from "express-session";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -7,6 +8,8 @@ import { envs } from "./config/env.plugin";
 import { error } from "./presentation/middlewares/error";
 import routesTask from "./presentation/routes/rTask";
 import { PrismaClient } from "@prisma/client";
+import routes from "./presentation/routes/rUser";
+import { isAuthenticated } from "./presentation/middlewares/auth";
 const app = express();
 const port = envs.PORT;
 
@@ -21,10 +24,18 @@ const port = envs.PORT;
   app.use(express.static(path.join(__dirname, "../public")));
   app.use(express.json());
   //CODIFICAION DE DATOS ESTEN CORRECTAMENTE
-  app.use(express.urlencoded({ extended: false }));
-
+  // al tener sesioens se pone en true
+  app.use(express.urlencoded({ extended: true }));
+  app.use(
+    session({
+      secret: "Secreto",
+      resave: true,
+      saveUninitialized: true,
+    }),
+  );
   //definicion de ruta
-  app.use(routesTask);
+  app.use(routes); //RUTAS PUBLICAS ORDEN SUPERIOR
+  app.use(isAuthenticated, routesTask);
   //LOS ERRORES VAN AL FINAL
   app.use(error.error404);
   app.listen(port, () => {

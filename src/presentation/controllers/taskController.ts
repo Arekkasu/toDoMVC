@@ -6,8 +6,6 @@ import { TaskEntity } from "../../domain/entities/tasks.entity";
 
 const databaseSystem = new TaskRepositoryImpl(new PostgresTaskDatasource());
 
-let tasks: any[] = [];
-
 const taskController = {
   getAll: async (req: Request, res: Response) => {
     try {
